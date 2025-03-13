@@ -4,7 +4,7 @@ import { quizQuestions } from '../assets/question';
 
 export function QuizApp() {
   const [userAnswer, setUseranswer] = useState([]);
-  const [questionIndex, setQuestionIndex] = useState(13);
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [correctionIdnex, setCorrectionidnex] = useState(0);
   const [userQuestion, setUserquestion] = useState(userAnswer[correctionIdnex]);
   const [question, setQuestion] = useState(quizQuestions[questionIndex]);
@@ -90,18 +90,15 @@ export function QuizApp() {
   }
   if (questionIndex - 1 === quizQuestions.length) {
     const endPage = (
-      <div className='quiz'>
-        <hr />
+      <div className='quiz quizs'>
         <p>
           You Scored {score.current} of {quizQuestions.length}
         </p>
         <h2>Review</h2>
+        <p className='question-2'>
+          {userQuestion.id}.{userQuestion.question}
+        </p>
         <div className='options'>
-          <p>
-            <strong>
-              {userQuestion.id}.{userQuestion.question}
-            </strong>
-          </p>
           <ul>
             {Object.entries(userQuestion.options).map(([key, value]) => (
               <li
@@ -119,11 +116,11 @@ export function QuizApp() {
               </li>
             ))}
           </ul>
-          <div className='correction-bottom'>
-            <button onClick={displayUserquestion}>Next</button>
-            <button onClick={displayPrevUserQuestion}>Previous</button>
-            <button onClick={reset}>Reset</button>
-          </div>
+        </div>
+        <div className='correction-bottom'>
+          <button onClick={displayUserquestion}>Next</button>
+          <button onClick={displayPrevUserQuestion}>Previous</button>
+          <button onClick={reset}>Reset</button>
         </div>
       </div>
     );

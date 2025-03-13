@@ -14,7 +14,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 500px;
+  width: 70%;
   padding-left: 50px;
   padding-bottom: 30px;
 }
@@ -104,6 +104,14 @@ button {
 }
 @media (max-width: 550px) {
   .quiz {
-    width: 90%;
+    width: 80%;
+    max-width: 350px;
+  }
+  .quizs {
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+  button {
+    padding-inline: 30px;
   }
 }
