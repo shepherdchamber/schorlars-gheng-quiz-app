@@ -21,7 +21,7 @@ body {
 .quiz-title {
   font-size: 1.4rem;
   font-weight: 550;
-  margin-left: -360px;
+  margin-left: 0;
 }
 .underline {
   background-color: rgba(134, 118, 118, 0.726);
@@ -66,7 +66,6 @@ ul li::marker {
   padding-left: 50px;
 }
 button {
-  margin-left: -10px;
   padding-inline: 50px;
   padding-block: 15px;
   margin-top: 10px;
@@ -75,15 +74,24 @@ button {
   border: 1px solid grey;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 20px;
 }
 
 .last {
-  font-size: 12px;
-  margin-left: 142px;
+  font-size: 0.8rem;
   margin-top: 18px;
   color: grey;
-  margin-left: -10px;
+}
+.bottoms,
+.correction-bottom {
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.correction-bottom {
+  flex-direction: row;
 }
 .correct {
   background-color: rgba(104, 240, 156, 0.329);
@@ -92,4 +100,9 @@ button {
 .wrong {
   background-color: rgba(255, 0, 0, 0.301);
   border-color: rgba(255, 0, 0, 0.114);
+}
+@media (max-width: 550px) {
+  .quiz {
+    width: 90%;
+  }
 }

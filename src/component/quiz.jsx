@@ -4,7 +4,7 @@ import { quizQuestions } from '../assets/question';
 
 export function QuizApp() {
   const [userAnswer, setUseranswer] = useState([]);
-  const [questionIndex, setQuestionIndex] = useState(10);
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [correctionIdnex, setCorrectionidnex] = useState(0);
   const [userQuestion, setUserquestion] = useState(userAnswer[correctionIdnex]);
   const [question, setQuestion] = useState(quizQuestions[questionIndex]);
@@ -91,7 +91,6 @@ export function QuizApp() {
   if (questionIndex - 1 === quizQuestions.length) {
     const endPage = (
       <div className='quiz'>
-        <h1 className='quiz-title'>Quiz App</h1>
         <hr />
         <p>
           You Scored {score.current} of {quizQuestions.length}
@@ -121,8 +120,10 @@ export function QuizApp() {
               </li>
             ))}
           </ul>
-          <button onClick={displayUserquestion}>Next</button>
-          <button onClick={displayPrevUserQuestion}>Previous</button>
+          <div className='correction-bottom'>
+            <button onClick={displayUserquestion}>Next</button>
+            <button onClick={displayPrevUserQuestion}>Previous</button>
+          </div>
         </div>
       </div>
     );
@@ -130,7 +131,7 @@ export function QuizApp() {
   } else {
     return (
       <div className='quiz'>
-        <h1 className='quiz-title'>Quiz App</h1>
+        <h1 className='quiz-title'>Scholar's GENG Quiz App</h1>
         <div className='underline'></div>
         <p className='question-2'>
           {question.id}. {question.question}
@@ -144,10 +145,12 @@ export function QuizApp() {
             ))}
           </ul>
         </div>
-        <button onClick={displayQuestion}>Next</button>
-        <p className='last'>
-          {question.id} of {quizQuestions.length} questions
-        </p>
+        <div className='bottoms'>
+          <button onClick={displayQuestion}>Next</button>
+          <p className='last'>
+            {question.id} of {quizQuestions.length} questions
+          </p>
+        </div>
       </div>
     );
   }
