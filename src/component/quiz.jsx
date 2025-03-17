@@ -1,16 +1,29 @@
 import '../styles/quiz.css';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, NonCopyable } from 'react';
 import { quizQuestions } from '../assets/question';
+import { EndPage } from './review';
+import { LoginPage } from './login';
+import { QuizBody } from './quiz-body';
 
 export function QuizApp() {
   const [userAnswer, setUseranswer] = useState([]);
-  const [questionIndex, setQuestionIndex] = useState(0);
+  const [questionIndex, setQuestionIndex] = useState(17);
   const [correctionIdnex, setCorrectionidnex] = useState(0);
   const [userQuestion, setUserquestion] = useState(userAnswer[correctionIdnex]);
   const [question, setQuestion] = useState(quizQuestions[questionIndex]);
-  const score = useRef(0);
+  const score = useRef(-1);
   const answered = useRef(false);
   const selectedAnswer = useRef(null);
+  const [userName, setUserName] = useState('');
+  const [started, setStarted] = useState(false);
+  const [mode, Setmode] = useState(false);
+
+  function starQuiz() {
+    userName.trim() !== '' ? setStarted(true) : '';
+  }
+
+  const toggleMode = () => Setmode((prev) => !prev);
+
   useEffect(() => {
     setUserquestion(userAnswer[correctionIdnex] || null);
   }, [correctionIdnex, userAnswer]);
@@ -79,76 +92,48 @@ export function QuizApp() {
         answer: question.answer,
       },
     ]);
-    console.log(userAnswer);
-    console.log(userQuestion);
   }
   function reset() {
     setQuestionIndex(0);
     setQuestion(quizQuestions[0]);
-    score.current = 0;
     setUseranswer([]);
   }
   if (questionIndex - 1 === quizQuestions.length) {
-    const endPage = (
-      <div className='quiz quizs'>
-        <p>
-          You Scored {score.current} of {quizQuestions.length}
-        </p>
-        <h2>Review</h2>
-        <p className='question-2'>
-          {userQuestion.id}.{userQuestion.question}
-        </p>
-        <div className='options'>
-          <ul>
-            {Object.entries(userQuestion.options).map(([key, value]) => (
-              <li
-                key={key}
-                className={
-                  key === userQuestion.answer
-                    ? 'correct'
-                    : key === userQuestion.selected
-                    ? 'wrong'
-                    : ''
-                }
-                name={key}
-              >
-                {value}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className='correction-bottom'>
-          <button onClick={displayUserquestion}>Next</button>
-          <button onClick={displayPrevUserQuestion}>Previous</button>
-          <button onClick={reset}>Reset</button>
-        </div>
-      </div>
+    return (
+      <EndPage
+        userQuestion={userQuestion}
+        score={score}
+        quizQuestions={quizQuestions}
+        displayPrevUserQuestion={displayPrevUserQuestion}
+        displayUserquestion={displayUserquestion}
+        reset={reset}
+        name={userName}
+        mode={mode}
+        toggleMode={toggleMode}
+      />
     );
-    return endPage;
+  }
+  if (!started) {
+    return (
+      <LoginPage
+        starQuiz={starQuiz}
+        userName={userName}
+        setUserName={setUserName}
+        toggleMode={toggleMode}
+        mode={mode}
+      />
+    );
   } else {
     return (
-      <div className='quiz'>
-        <h1 className='quiz-title'>Scholar's GENG Quiz App</h1>
-        <div className='underline'></div>
-        <p className='question-2'>
-          {question.id}. {question.question}
-        </p>
-        <div className='options'>
-          <ul>
-            {Object.entries(question.options).map(([key, value]) => (
-              <li key={key} name={key} onClick={(e) => answer(key, e)}>
-                {value}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className='bottoms'>
-          <button onClick={displayQuestion}>Next</button>
-          <p className='last'>
-            {question.id} of {quizQuestions.length} questions
-          </p>
-        </div>
-      </div>
+      <QuizBody
+        question={question}
+        quizQuestions={quizQuestions}
+        displayQuestion={displayQuestion}
+        userName={userName}
+        answer={answer}
+        toggleMode={toggleMode}
+        mode={mode}
+      />
     );
   }
 }
