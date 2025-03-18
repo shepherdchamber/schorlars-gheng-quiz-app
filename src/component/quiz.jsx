@@ -1,22 +1,37 @@
 import '../styles/quiz.css';
 import { useState, useEffect, useRef, NonCopyable } from 'react';
-import { quizQuestions } from '../assets/question';
+import { shuffled } from '../assets/question';
 import { EndPage } from './review';
 import { LoginPage } from './login';
 import { QuizBody } from './quiz-body';
 
 export function QuizApp() {
   const [userAnswer, setUseranswer] = useState([]);
-  const [questionIndex, setQuestionIndex] = useState(17);
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [correctionIdnex, setCorrectionidnex] = useState(0);
   const [userQuestion, setUserquestion] = useState(userAnswer[correctionIdnex]);
-  const [question, setQuestion] = useState(quizQuestions[questionIndex]);
+  const [question, setQuestion] = useState(shuffled[questionIndex]);
+  // const [shuffled, setShuffledQuestions] = useState([]);
   const score = useRef(-1);
   const answered = useRef(false);
   const selectedAnswer = useRef(null);
   const [userName, setUserName] = useState('');
   const [started, setStarted] = useState(false);
   const [mode, Setmode] = useState(false);
+  const questionNumber = useRef(1);
+
+  // function shuffleQuestions() {
+  //   const shuffled = [...quizQuestions].sort(() => Math.random() - 0.5);
+  //   setShuffledQuestions(shuffled);
+
+  //   setQuestion(shuffled[0]);
+  // }
+
+  function calculateScore() {
+    return userAnswer.filter(
+      (question) => question.selected === question.correct
+    ).length;
+  }
 
   function starQuiz() {
     userName.trim() !== '' ? setStarted(true) : '';
@@ -38,11 +53,15 @@ export function QuizApp() {
   }
 
   function displayQuestion() {
-    setQuestionIndex((prevIndex) => prevIndex + 1);
-    setQuestion(quizQuestions[questionIndex]);
+    setQuestionIndex((prev) => {
+      const newIndex = prev + 1;
+      setQuestion(shuffled[questionIndex]);
+      return newIndex;
+    });
     document.querySelectorAll('.options li').forEach((li) => {
       return li.classList.remove('correct', 'wrong');
     });
+    questionNumber.current += 1;
     answered.current = false;
     setUseranswer((prev) => {
       const existing = prev.find((prev) => prev.id === question.id);
@@ -71,8 +90,8 @@ export function QuizApp() {
     selectedAnswer.current = ans;
     if (question.answer === ans && answered.current === false) {
       answered.current = true;
-      element.target.className = 'correct';
       score.current += 1;
+      element.target.className = 'correct';
       console.log('correct');
     } else if (question.answer !== ans && answered.current === false) {
       element.target.className = 'wrong';
@@ -95,15 +114,15 @@ export function QuizApp() {
   }
   function reset() {
     setQuestionIndex(0);
-    setQuestion(quizQuestions[0]);
+    setQuestion(shuffled[0]);
     setUseranswer([]);
   }
-  if (questionIndex - 1 === quizQuestions.length) {
+  if (questionNumber.current - 1 === 20) {
     return (
       <EndPage
         userQuestion={userQuestion}
         score={score}
-        quizQuestions={quizQuestions}
+        quizQuestions={shuffled}
         displayPrevUserQuestion={displayPrevUserQuestion}
         displayUserquestion={displayUserquestion}
         reset={reset}
@@ -127,12 +146,13 @@ export function QuizApp() {
     return (
       <QuizBody
         question={question}
-        quizQuestions={quizQuestions}
+        quizQuestions={shuffled}
         displayQuestion={displayQuestion}
         userName={userName}
         answer={answer}
         toggleMode={toggleMode}
         mode={mode}
+        questionNumber={questionNumber.current}
       />
     );
   }

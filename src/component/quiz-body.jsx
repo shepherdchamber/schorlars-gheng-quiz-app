@@ -6,6 +6,7 @@ export function QuizBody({
   answer,
   mode,
   toggleMode,
+  questionNumber,
 }) {
   return (
     <div className={mode ? 'light' : 'dark'}>
@@ -30,7 +31,7 @@ export function QuizBody({
           className='underline'
         ></div>{' '}
         <p className='question-2'>
-          {question.id}. {question.question}
+          {questionNumber}. {question.question}
         </p>
         <div className='options'>
           <ul>
@@ -43,10 +44,10 @@ export function QuizBody({
         </div>
         <div className='bottoms'>
           <button className='next-btn' onClick={displayQuestion}>
-            Next
+            {questionNumber === quizQuestions.length ? 'Submit' : 'Next'}
           </button>
           <p className='last'>
-            {question.id} of {quizQuestions.length} questions
+            {questionNumber} of {quizQuestions.length} questions
           </p>
         </div>
       </div>
