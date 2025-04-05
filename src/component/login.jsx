@@ -1,10 +1,20 @@
+import '../styles/quiz.css';
+import Select from 'react-select';
+
 export function LoginPage({
   starQuiz,
   setUserName,
   userName,
   mode,
   toggleMode,
+  handleCourse,
+  course,
 }) {
+  const options = [
+    { value: 'Math101', label: 'MTH 101' },
+    { value: 'GST101', label: 'GST 101' },
+    { value: 'dailyQuiz', label: 'Daily Quiz' },
+  ];
   return (
     <div className={mode ? 'light' : 'dark'}>
       <div className={mode ? 'light-quiz' : 'quiz'}>
@@ -34,6 +44,15 @@ export function LoginPage({
         <button className='submit-btn' onClick={starQuiz}>
           Submit
         </button>
+      </div>
+      <div className='select'>
+        <Select
+          placeholder='Select course'
+          onChange={handleCourse}
+          value={course}
+          options={options}
+          classNamePrefix='mySelect'
+        />
       </div>
     </div>
   );

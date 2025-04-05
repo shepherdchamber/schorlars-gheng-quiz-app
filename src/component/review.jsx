@@ -38,9 +38,7 @@ export function EndPage({
           , you Scored {score.current} of {quizQuestions.length}
         </p>
         <h2>Review</h2> <div className='underline'></div>
-        <p className='question-2'>
-          {userQuestion.id}.{userQuestion.question}
-        </p>
+        <p className='question-2'>{userQuestion.question}</p>
         <div className='options'>
           <ul>
             {Object.entries(userQuestion.options).map(([key, value]) => (

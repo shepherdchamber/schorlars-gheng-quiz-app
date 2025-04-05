@@ -1,16 +1,21 @@
 import '../styles/quiz.css';
 import { useState, useEffect, useRef, NonCopyable } from 'react';
-import { shuffled } from '../assets/question';
+// import { Math101 } from '../assets/math 101';
+import { Gst111 } from '../assets/gst 111';
+import { dailyQuiz } from '../assets/dailyquiz';
 import { EndPage } from './review';
 import { LoginPage } from './login';
 import { QuizBody } from './quiz-body';
+import { Math101 } from '../assets/math 101';
 
 export function QuizApp() {
   const [userAnswer, setUseranswer] = useState([]);
+  const [course, setCourse] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [correctionIdnex, setCorrectionidnex] = useState(0);
   const [userQuestion, setUserquestion] = useState(userAnswer[correctionIdnex]);
-  const [question, setQuestion] = useState(shuffled[questionIndex]);
+  const [allQuestion, setAllQuestion] = useState([]);
+  const [question, setQuestion] = useState(allQuestion[questionIndex]);
   // const [shuffled, setShuffledQuestions] = useState([]);
   const score = useRef(-1);
   const answered = useRef(false);
@@ -20,18 +25,47 @@ export function QuizApp() {
   const [mode, Setmode] = useState(false);
   const questionNumber = useRef(1);
 
-  // function shuffleQuestions() {
-  //   const shuffled = [...quizQuestions].sort(() => Math.random() - 0.5);
-  //   setShuffledQuestions(shuffled);
+  let selectedCourse;
 
-  //   setQuestion(shuffled[0]);
-  // }
-
-  function calculateScore() {
-    return userAnswer.filter(
-      (question) => question.selected === question.correct
-    ).length;
+  useEffect(() => {
+    if (course.value) {
+      if (course.value === 'Math101') {
+        setQuestion(Math101[questionIndex]);
+        selectedCourse = Math101;
+        setAllQuestion(selectedCourse);
+      } else if (course.value === 'Math103') {
+        setQuestion(Math103[questionIndex]);
+        selectedCourse = Math103;
+        setAllQuestion(selectedCourse);
+      } else if (course.value === 'GST101') {
+        setQuestion(Gst111[questionIndex]);
+        selectedCourse = Gst111;
+        setAllQuestion(selectedCourse);
+      } else if (course.value === 'Phy101') {
+        setQuestion(Phy101[questionIndex]);
+        selectedCourse = Phy101;
+        setAllQuestion(selectedCourse);
+      } else if (course.value === 'Phy103') {
+        setQuestion(Phy103[questionIndex]);
+        selectedCourse = Phy103;
+        setAllQuestion(selectedCourse);
+      } else {
+        setQuestion(dailyQuiz[questionIndex]);
+        selectedCourse = dailyQuiz;
+        setAllQuestion(selectedCourse);
+      }
+      console.log(selectedCourse);
+    }
+  }, [course]);
+  function handleCourse(option) {
+    setCourse(option);
   }
+
+  // function calculateScore() {
+  //   return userAnswer.filter(
+  //     (question) => questions.selected === question.correct
+  //   ).length;
+  // }
 
   function starQuiz() {
     userName.trim() !== '' ? setStarted(true) : '';
@@ -55,7 +89,7 @@ export function QuizApp() {
   function displayQuestion() {
     setQuestionIndex((prev) => {
       const newIndex = prev + 1;
-      setQuestion(shuffled[questionIndex]);
+      setQuestion(allQuestion[questionIndex]);
       return newIndex;
     });
     document.querySelectorAll('.options li').forEach((li) => {
@@ -76,7 +110,7 @@ export function QuizApp() {
         return [
           ...prev,
           {
-            id: question.id,
+            id: questionNumber.current,
             question: question.question,
             selected: selectedAnswer.current,
             correct: question.answer,
@@ -114,15 +148,15 @@ export function QuizApp() {
   }
   function reset() {
     setQuestionIndex(0);
-    setQuestion(shuffled[0]);
+    setQuestion(Math101[0]);
     setUseranswer([]);
   }
-  if (questionNumber.current - 1 === 20) {
+  if (question && questionNumber.current - 1 === allQuestion.length) {
     return (
       <EndPage
         userQuestion={userQuestion}
         score={score}
-        quizQuestions={shuffled}
+        quizQuestions={allQuestion}
         displayPrevUserQuestion={displayPrevUserQuestion}
         displayUserquestion={displayUserquestion}
         reset={reset}
@@ -140,13 +174,15 @@ export function QuizApp() {
         setUserName={setUserName}
         toggleMode={toggleMode}
         mode={mode}
+        course={course}
+        handleCourse={handleCourse}
       />
     );
   } else {
     return (
       <QuizBody
         question={question}
-        quizQuestions={shuffled}
+        quizQuestions={Math101}
         displayQuestion={displayQuestion}
         userName={userName}
         answer={answer}

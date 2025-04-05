@@ -142,9 +142,31 @@ button {
 .correction-bottom button {
   padding-inline: 10px;
 }
+.select {
+  width: 80%;
+  margin-top: 30px;
+}
+.mySelect__control {
+  width: 100% !important;
+  height: 60px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.mySelect__option {
+  color: black !important;
+  margin-block: 10px !important;
+  padding-block: 15px !important;
+  cursor: pointer;
+}
+.mySelect__menu {
+  margin-top: 0px !important;
+}
 
 @media (min-width: 700px) {
   .quiz {
     width: 500px;
+  }
+  .select {
+    width: 510px;
   }
 }
